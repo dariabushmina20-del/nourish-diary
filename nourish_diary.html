@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#171014">
+<title>nourish. — дневник питания</title>
+<style>
+:root{--bg:#171014;--panel:#261820;--panel2:#351824;--wine:#482333;--line:#563541;--text:#f2e7eb;--muted:#ad929c;--accent:#d1a2b0;--accent2:#a96e82}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#321a26 0%,transparent 42%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{width:min(940px,100% - 32px);margin:auto;padding:28px 0 56px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:46px}
+.logo{font-family:Georgia,serif;font-size:29px;letter-spacing:-1.2px;color:#ead7de}
+.logo span{color:var(--accent2)}
+nav{display:flex;gap:8px}button,.navbtn{border:1px solid var(--line);background:#241720;color:var(--muted);padding:10px 14px;border-radius:12px;font-size:13px;cursor:pointer;transition:.2s}
+button:hover,.navbtn.active{background:var(--wine);color:var(--text);border-color:#805265}
+.eyebrow{font-size:10px;letter-spacing:2.2px;color:var(--accent2);font-weight:700}
+h1{font:normal clamp(34px,6vw,48px)/1.1 Georgia,serif;margin:10px 0 8px;letter-spacing:-1px}
+.sub{color:var(--muted);font-size:14px}
+.top{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:26px}
+.datebox{display:flex;align-items:center;gap:9px;color:var(--accent);font-size:13px}
+.datebox input{color:var(--text);background:var(--panel);border:1px solid var(--line);padding:9px;border-radius:10px}
+.summary{background:linear-gradient(135deg,#482333,#301923 75%);border:1px solid #65404d;border-radius:22px;padding:24px 26px;margin:26px 0 34px;box-shadow:0 18px 50px #09060955}
+.summary-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.summary h2{font:normal 25px Georgia,serif;margin:8px 0 5px}.summary p{color:#c9aeb6;font-size:13px;margin:0}
+.pill{font-size:11px;color:#e2c4cd;border:1px solid #805265;padding:7px 10px;border-radius:30px}
+.summary-bottom{display:flex;gap:26px;margin-top:22px;padding-top:18px;border-top:1px solid #65404d}
+.stat strong{display:block;font:normal 27px Georgia,serif}.stat span{font-size:11px;color:#c5a5b0}
+.section-title{font:normal 23px Georgia,serif;margin:0 0 16px}
+.meals{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.meal{background:var(--panel);border:1px solid #3d2932;border-radius:17px;padding:17px;min-height:118px;display:flex;gap:13px;align-items:flex-start}
+.meal-icon{width:38px;height:38px;border-radius:12px;background:#432433;display:grid;place-items:center;color:#d3a7b5;font-size:18px;flex:none}
+.meal-content{flex:1;min-width:0}.meal h3{font-size:14px;font-weight:600;margin:2px 0 7px}.meal p{font-size:12px;line-height:1.5;color:var(--muted);margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.add{background:transparent;border:1px dashed #795063;border-radius:17px;color:var(--accent);min-height:118px;display:flex;align-items:center;justify-content:center;gap:9px;flex-direction:column}
+.add b{font-size:13px;font-weight:500}.add small{color:var(--muted);font-size:11px}
+.voice{margin-top:28px;background:#241720;border:1px solid #4a303b;border-radius:18px;padding:19px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.voice strong{font:normal 19px Georgia,serif}.voice p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.voice button{background:#563044;color:#f3e5ea;border-color:#805265;padding:12px 16px;white-space:nowrap}
+.history{margin-top:35px}.history-list{display:grid;gap:9px}.history-item{padding:13px 16px;border:1px solid #3d2932;background:#21161d;border-radius:12px;display:flex;justify-content:space-between;align-items:center;color:var(--text);font-size:13px}
+.history-item span:last-child{color:var(--muted);font-size:11px}
+footer{text-align:center;color:#745966;font-size:11px;margin-top:45px}
+dialog{background:#21161d;color:var(--text);border:1px solid #694556;border-radius:20px;width:min(460px,calc(100% - 28px));padding:24px;box-shadow:0 25px 90px #000a}
+dialog::backdrop{background:#080509bb;backdrop-filter:blur(5px)}
+dialog h2{font:normal 25px Georgia,serif;margin:0 0 18px}
+label{display:block;color:var(--muted);font-size:12px;margin:13px 0 7px}
+input,select,textarea{width:100%;background:#171014;border:1px solid #563541;border-radius:11px;color:var(--text);padding:12px;font:inherit;font-size:13px;outline:none}
+textarea{min-height:105px;resize:vertical}
+.actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.primary{background:#633449;color:#fff;border-color:#805265}
+.empty{color:var(--muted);font-size:12px}
+@media(max-width:600px){.wrap{width:calc(100% - 26px);padding-top:20px}header{margin-bottom:34px}.top{align-items:flex-start;flex-direction:column}.meals{grid-template-columns:1fr}.summary{padding:20px}.voice{align-items:flex-start;flex-direction:column}.voice button{width:100%}nav button{padding:9px 10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">nourish<span>.</span></div>
+  <nav><button class="navbtn active" id="diaryTab">Дневник</button><button class="navbtn" id="historyTab">История</button></nav>
+</header>
+<main id="diaryView">
+  <div class="top">
+    <div><div class="eyebrow">МОЙ ЛИЧНЫЙ ДНЕВНИК</div><h1>Моё питание</h1><div class="sub">Небольшие заметки о каждом дне.</div></div>
+    <div class="datebox"> <span>Дата</span><input type="date" id="dayPicker"></div>
+  </div>
+  <section class="summary">
+    <div class="summary-top"><div><div class="eyebrow" style="color:#d0a2b0">СЕГОДНЯ</div><h2>Твой день</h2><p>Все записи о питании в одном месте</p></div><span class="pill">личный дневник</span></div>
+    <div class="summary-bottom"><div class="stat"><strong id="mealCount">0</strong><span>приёмов пищи</span></div><div class="stat"><strong id="entryCount">0</strong><span>записей</span></div></div>
+  </section>
+  <h2 class="section-title">Приёмы пищи</h2>
+  <div class="meals" id="mealGrid"></div>
+  <section class="voice">
+    <div><strong>Голосовая заметка</strong><p>Нажми, чтобы надиктовать, что ты сегодня ела.</p></div>
+    <button id="voiceBtn">🎙 Начать диктовку</button>
+  </section>
+</main>
+<main id="historyView" hidden>
+  <div class="eyebrow">ВОСПОМИНАНИЯ</div><h1>История</h1><p class="sub">Твои записи, собранные по датам.</p>
+  <div class="history"><div class="history-list" id="historyList"></div></div>
+</main>
+<footer>nourish. <span>·</span> личное пространство для заботы о себе</footer>
+</div>
+<dialog id="entryDialog">
+  <form method="dialog" id="entryForm">
+    <h2 id="dialogTitle">Новая запись</h2>
+    <label for="mealType">Приём пищи</label>
+    <select id="mealType"><option>Завтрак</option><option>Обед</option><option>Ужин</option><option>Перекус</option></select>
+    <label for="foodText">Что ты ела?</label>
+    <textarea id="foodText" placeholder="Например: картофельное пюре, мясо с подливой..." required></textarea>
+    <label for="portionText">Порция или дополнительные заметки (необязательно)</label>
+    <input id="portionText" placeholder="Например: небольшая тарелка">
+    <div class="actions"><button type="button" id="cancelBtn">Отмена</button><button class="primary" type="submit">Сохранить запись</button></div>
+  </form>
+</dialog>
+<script>
+const keys=['Завтрак','Обед','Ужин','Перекус'];
+const icons={'Завтрак':'☼','Обед':'☀','Ужин':'☾','Перекус':'✧'};
+const picker=document.getElementById('dayPicker');
+const today=new Date(); const localDate=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+picker.value=localDate;
+let data=JSON.parse(localStorage.getItem('nourishDiary')||'{}');
+let selectedType='Завтрак';
+const save=()=>localStorage.setItem('nourishDiary',JSON.stringify(data));
+const entries=()=>data[picker.value]||[];
+function render(){
+ const items=entries(); const grid=document.getElementById('mealGrid');grid.innerHTML='';
+ keys.forEach(k=>{
+   const group=items.filter(x=>x.type===k);
+   const card=document.createElement('div');card.className='meal';
+   const desc=group.length?group.map(x=>x.food+(x.portion?' · '+x.portion:'')).join('\n'):'Пока нет записей';
+   card.innerHTML=`<div class="meal-icon">${icons[k]}</div><div class="meal-content"><h3>${k}</h3><p class="${group.length?'':'empty'}"></p></div>`;
+   card.querySelector('p').textContent=desc;
+   card.addEventListener('click',()=>openDialog(k));
+   grid.appendChild(card);
+ });
+ const add=document.createElement('button');add.className='add';add.innerHTML='<b>＋ Добавить запись</b><small>Выбери приём пищи</small>';add.onclick=()=>openDialog('Завтрак');grid.appendChild(add);
+ document.getElementById('mealCount').textContent=new Set(items.map(x=>x.type)).size;
+ document.getElementById('entryCount').textContent=items.length;
+}
+function openDialog(type){selectedType=type;document.getElementById('mealType').value=type;document.getElementById('foodText').value='';document.getElementById('portionText').value='';document.getElementById('entryDialog').showModal();}
+document.getElementById('entryForm').addEventListener('submit',e=>{
+ e.preventDefault();const food=document.getElementById('foodText').value.trim();if(!food)return;
+ const arr=data[picker.value]||[];arr.push({type:document.getElementById('mealType').value,food,portion:document.getElementById('portionText').value.trim(),created:Date.now()});data[picker.value]=arr;save();document.getElementById('entryDialog').close();render();
+});
+document.getElementById('cancelBtn').onclick=()=>document.getElementById('entryDialog').close();
+picker.addEventListener('change',render);
+function showHistory(){
+ document.getElementById('diaryView').hidden=true;document.getElementById('historyView').hidden=false;
+ document.getElementById('diaryTab').classList.remove('active');document.getElementById('historyTab').classList.add('active');
+ const list=document.getElementById('historyList');list.innerHTML='';
+ const dates=Object.keys(data).filter(d=>data[d].length).sort().reverse();
+ if(!dates.length){list.innerHTML='<p class="empty">Пока здесь пусто. Твои записи появятся после первого сохранения.</p>';return;}
+ dates.forEach(d=>{const el=document.createElement('div');el.className='history-item';const date=new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});el.innerHTML=`<span>${date}</span><span>${data[d].length} записей →</span>`;el.onclick=()=>{picker.value=d;showDiary();};list.appendChild(el);});
+}
+function showDiary(){document.getElementById('historyView').hidden=true;document.getElementById('diaryView').hidden=false;document.getElementById('historyTab').classList.remove('active');document.getElementById('diaryTab').classList.add('active');render();}
+document.getElementById('historyTab').onclick=showHistory;document.getElementById('diaryTab').onclick=showDiary;
+const voiceBtn=document.getElementById('voiceBtn');
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SpeechRecognition){voiceBtn.onclick=()=>{const rec=new SpeechRecognition();rec.lang='ru-RU';rec.interimResults=false;rec.onresult=e=>{const spoken=e.results[0][0].transcript;openDialog('Перекус');document.getElementById('foodText').value=spoken;};rec.onerror=()=>alert('Не удалось распознать речь. Можно добавить запись вручную.');rec.start();voiceBtn.textContent='Слушаю…';rec.onend=()=>voiceBtn.textContent='🎙 Начать диктовку';};}
+else{voiceBtn.onclick=()=>alert('Голосовой ввод не поддерживается этим браузером. Добавь запись через карточку приёма пищи.');}
+render();
+</script>
+</body></html>
